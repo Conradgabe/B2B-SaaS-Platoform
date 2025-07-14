@@ -2,11 +2,10 @@ from logging.config import fileConfig
 
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
-from dotenv import load_dotenv
-import os
 
 from alembic import context
 
+from app.database.orms import public_schema_orm, tenant_client_schema_orm
 from app.root.utils.abstract_base import AbstractBase
 
 # this is the Alembic Config object, which provides
