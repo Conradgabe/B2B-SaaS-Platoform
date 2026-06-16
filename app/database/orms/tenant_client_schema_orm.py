@@ -19,15 +19,15 @@ class Client(AbstractBase):
     address: Mapped[str] = mapped_column(String(255), nullable=True)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)  
 
-    workflow_progress: Mapped["ClientsWorkFlowProgress"] = relationship(
-        "ClientsWorkFlowProgress", back_populates="client", cascade="all, delete-orphan"
+    workflow_progress: Mapped["ClientsWorkflowProgress"] = relationship(
+        "ClientsWorkflowProgress", back_populates="client", cascade="all, delete-orphan"
     )
     communication: Mapped["Communication"] = relationship(
         "Communication", back_populates="client", cascade="all, delete-orphan"
     )
 
 
-class ClientsWorkFlowProgress(AbstractBase):
+class ClientsWorkflowProgress(AbstractBase):
     __tablename__ = "clients_workflow_progress"
 
     id = Column(UUID(as_uuid=True), primary_key=True, unique=True, nullable=False, default=uuid.uuid4)
@@ -37,25 +37,25 @@ class ClientsWorkFlowProgress(AbstractBase):
     is_completed: Mapped[bool] = mapped_column(Boolean, default=False)
 
     client: Mapped[Client] = relationship("Client", back_populates="workflow_progress")
-    client_workflow: Mapped["WorkFLow"] = relationship("WorkFLow", back_populates="client_workflow_progress")
+    client_workflow: Mapped["Workflow"] = relationship("Workflow", back_populates="client_workflow_progress")
 
 
-class WorkFLow(AbstractBase):
+class Workflow(AbstractBase):
     __tablename__ = "workflows"
 
     id = Column(UUID(as_uuid=True), primary_key=True, unique=True, nullable=False, default=uuid.uuid4)
     name: Mapped[str] = mapped_column(String(255), nullable=False)
     description: Mapped[str] = mapped_column(String(500), nullable=True)
 
-    workflow_step: Mapped["WorkFLowStep"] = relationship(
-        "WorkFLowStep", back_populates="workflow", cascade="all, delete-orphan"
+    workflow_step: Mapped["WorkflowStep"] = relationship(
+        "WorkflowStep", back_populates="workflow", cascade="all, delete-orphan"
     )
-    client_workflow_progress: Mapped[ClientsWorkFlowProgress] = relationship(
-        "ClientsWorkFlowProgress", back_populates="client_workflow", cascade="all, delete-orphan"
+    client_workflow_progress: Mapped[ClientsWorkflowProgress] = relationship(
+        "ClientsWorkflowProgress", back_populates="client_workflow", cascade="all, delete-orphan"
     )
 
 
-class WorkFLowStep(AbstractBase):
+class WorkflowStep(AbstractBase):
     __tablename__ = "workflow_steps"
 
     id = Column(UUID(as_uuid=True), primary_key=True, unique=True, nullable=False, default=uuid.uuid4)
@@ -63,7 +63,7 @@ class WorkFLowStep(AbstractBase):
     step_name: Mapped[str] = mapped_column(String(255), nullable=False)
     step_order: Mapped[int] = mapped_column(Integer, nullable=False)
 
-    workflow: Mapped[WorkFLow] = relationship("WorkFlow", back_populates="workflow_step")
+    workflow: Mapped[Workflow] = relationship("Workflow", back_populates="workflow_step")
 
 
 # Communication related ORM models
@@ -76,4 +76,4 @@ class Communication(AbstractBase):
     status: Mapped[str] = mapped_column(String(50), nullable=False)  # pending, sent, failed, bounced
     external_message_id: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
 
-    client: Mapped[Client] = relationship("Client", back_populates="communication") 
+    client: Mapped[Client] = relationship("Client", back_populates="communication")

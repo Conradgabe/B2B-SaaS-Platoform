@@ -16,7 +16,7 @@ class Tenant(AbstractBase):
     id = Column(UUID(as_uuid=True), primary_key=True, unique=True, nullable=False, default=uuid.uuid4)
     company_name: Mapped[str] = mapped_column(String(255), nullable=False, unique=True)
     company_size: Mapped[int] = mapped_column(Integer, nullable=True)
-    company_descriptio: Mapped[str] = mapped_column(String(500), nullable=True)
+    company_description: Mapped[str] = mapped_column(String(500), nullable=True)
     address: Mapped[str] = mapped_column(String(255), nullable=True)
     schema_name: Mapped[str] = mapped_column(String, nullable=False, unique=True)
     subscription_status: Mapped[str] = mapped_column(String, default="trial", nullable=False) # trial, active, cancelled
@@ -24,7 +24,7 @@ class Tenant(AbstractBase):
     user_tenants: Mapped["UserTenant"] = relationship("UserTenant", back_populates="tenant", cascade="all, delete-orphan")
     tenant_audit_logs: Mapped["AuditLogs"] = relationship("AuditLogs", back_populates="tenant", cascade="all, delete-orphan")
     idempotency_key: Mapped["IdempotencyKey"] = relationship("IdempotencyKey", back_populates="tenant", cascade="all, delete-orphan")
-    integration_stat: Mapped["IntegrationStatus"] = relationship("IntegrationStatus", back_populates="tenant", cascade="all, delete-orphan")
+    integration_stats: Mapped["IntegrationStatus"] = relationship("IntegrationStatus", back_populates="tenant", cascade="all, delete-orphan")
 
 
 class User(AbstractBase):
